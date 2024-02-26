@@ -1,8 +1,10 @@
 const express = require('express');
 const supa = require('@supabase/supabase-js');
 const app = express();
+
 const supaUrl = 'https://wdkjxcsmlojjhhyzvfqc.supabase.co';
 const supaAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indka2p4Y3NtbG9qamhoeXp2ZnFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDg4OTIwNjEsImV4cCI6MjAyNDQ2ODA2MX0.W8RWcceIR8Qqn59ttKeQ5NTqEhAHESerTI8JPCbjlpk';
+
 const supabase = supa.createClient(supaUrl, supaAnonKey);
 
 
@@ -28,10 +30,10 @@ app.get('/api/circuits/:ref', async (req, res) => { //TESTED
 	.from('circuits')
 	.select()
 	.eq('circuitRef',req.params.ref);
-	res.send(data);
 	if(!data){
 		res.json({ error: `circuit not found.` });
 	}
+	res.send(data);
 });
 
 //Returns the circuits used in a given season
@@ -261,19 +263,6 @@ app.get('/api/standings/:raceId/constructors', async (req, res) => {//TESTED
 		res.json({ error: `invalid race id.` });
 	}
 });
-
-
-// Default response for any other request
-app.use(function (req, res) {
-	res.status(404);
-});
-
-
-
-
-
-
-
 
 app.listen(8080, () => {
 	console.log('listening on port 8080');
