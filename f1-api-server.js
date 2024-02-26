@@ -275,7 +275,6 @@ app.use(function (req, res) {
 
 
 
-//FOR TESTING PURPOSES
 app.listen(8080, () => {
 	console.log('listening on port 8080');
 });
