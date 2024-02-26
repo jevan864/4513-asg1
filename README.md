@@ -1,4 +1,4 @@
-example localhost:8080s:
+example links:
 
 localhost:8080/api/seasons
 localhost:8080/api/circuits
