@@ -30,10 +30,12 @@ app.get('/api/circuits/:ref', async (req, res) => { //TESTED
 	.from('circuits')
 	.select()
 	.eq('circuitRef',req.params.ref);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `circuit not found.` });
 	}
-	res.send(data);
+	else{
+		res.send(data);
+	}
 });
 
 //Returns the circuits used in a given season
@@ -43,9 +45,11 @@ app.get('/api/circuits/season/:year', async (req, res) => {//TESTED
 	.select('circuits(*)')
 	.eq('year',req.params.year)
 	.order('round', { ascending: true });
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `no data found; check year value.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -63,9 +67,11 @@ app.get('/api/constructors/:ref', async (req, res) => {//TESTED
 	.from('constructors')
 	.select()
 	.eq('constructorRef',req.params.ref);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `constructor not found.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -83,9 +89,11 @@ app.get('/api/drivers/:ref', async (req, res) => {//TESTED
 	.from('drivers')
 	.select()
 	.eq('driverRef',req.params.ref);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `driver not found.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -95,9 +103,11 @@ app.get('/api/drivers/search/:substring', async (req, res) => { //TESTED
 	.from('drivers')
 	.select()
 	.ilike('driverRef', req.params.substring + '%');
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `no data found for given substring.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -107,9 +117,11 @@ app.get('/api/drivers/race/:raceId', async (req, res) => {//TESTED
 	.from('results')
 	.select('drivers(*)')
 	.eq('raceId',req.params.raceId);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `invalid race id.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -119,9 +131,11 @@ app.get('/api/races/:raceId', async (req, res) => { //WHEN TESTING: CHECK FOR Do
 	.from('races')
 	.select()
 	.eq('raceId',req.params.raceId);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `invalid race id.` });
+	}
+	else{
+		res.send(data);
 	}
 });//TESTED BUT DIDNT CHECK FORMAT(see note)
 
@@ -132,9 +146,12 @@ app.get('/api/races/season/:year', async (req, res) => {//TESTED
 	.select()
 	.eq('year',req.params.year)
 	.order('round', { ascending: true });
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `no races found; check year value.` });
+		
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -145,9 +162,11 @@ app.get('/api/races/season/:year/:round', async (req, res) => {//TESTED
 	.select()
 	.eq('year',req.params.year)
 	.eq('round', req.params.round);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `no races found; check year or round value.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -158,9 +177,11 @@ app.get('/api/races/circuits/:ref', async (req, res) => {//TESTED
 	.select('*, circuits!inner()')
 	.eq('circuits.circuitRef',req.params.ref)
 	.order('year', { ascending : true });
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `circuit not found.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -172,14 +193,16 @@ app.get('/api/races/circuits/:ref/season/:start/:end', async (req, res) => {//TE
 	.eq('circuits.circuitRef',req.params.ref)
 	.gte('year', req.params.start)
 	.lte('year', req.params.end);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		if(req.params.end < req.params.start){
 			res.json({ error: `initial year of range cannot be greater than final year of range`});
 		}
 		else{
 			res.json({ error: `no races for given circuit found in range.` });
 		}
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -190,9 +213,11 @@ app.get('/api/results/:raceId', async (req, res) => { //TESTED
 	.select('resultId, drivers(driverRef, code, forename, surname), races(name, round, year, date), constructors(name, constructorRef, nationality), number, grid, positionText, positionOrder, points, laps, time, milliseconds, fastestLap, rank, fastestLapTime, fastestLapSpeed')
 	.eq('raceId', req.params.raceId)
 	.order('grid', {ascending : true});
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `invalid race id.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -202,9 +227,11 @@ app.get('/api/results/driver/:ref', async (req, res) => {//TESTED
 	.from('results')
 	.select('*, drivers!inner()')
 	.eq('drivers.driverRef', req.params.ref);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `driver not found` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -216,14 +243,16 @@ app.get('/api/results/driver/:ref/seasons/:start/:end', async (req, res) => {//T
 	.eq('drivers.driverRef',req.params.ref)
 	.gte('races.year', req.params.start)
 	.lte('races.year', req.params.end);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		if(req.params.end < req.params.start){
 			res.json({ error: `initial year of range cannot be greater than final year of range`});
 		}
 		else{
 			res.json({ error: `no races for given circuit found in range.` });
 		}
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -233,9 +262,11 @@ app.get('/api/qualifying/:raceId', async (req, res) => {//TESTED
 	.from('qualifying')
 	.select('qualifyId, races(name, round, year, date), drivers(driverRef, code, forename, surname), constructors(name, constructorRef, nationality), number, position, q1, q2, q3')
 	.eq('raceId',req.params.raceId);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `invalid race id.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -245,9 +276,11 @@ app.get('/api/standings/:raceId/drivers', async (req, res) => {//TESTED
 	.from('driver_standings')
 	.select('driverStandingsId, drivers(driverRef, code, forename, surname), points, position, wins')
 	.eq('raceId',req.params.raceId);
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `invalid race id.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
@@ -258,9 +291,11 @@ app.get('/api/standings/:raceId/constructors', async (req, res) => {//TESTED
 	.select('constructorStandingsId, constructors(name, constructorRef, nationality), points, positionText, wins')
 	.eq('raceId',req.params.raceId)
 	.order('position', {ascending: true});
-	res.send(data);
-	if(!data){
+	if(data.length==0){
 		res.json({ error: `invalid race id.` });
+	}
+	else{
+		res.send(data);
 	}
 });
 
