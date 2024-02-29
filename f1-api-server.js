@@ -126,10 +126,10 @@ app.get('/api/drivers/race/:raceId', async (req, res) => {//TESTED
 });
 
 //Returns just the specified race. 
-app.get('/api/races/:raceId', async (req, res) => { //WHEN TESTING: CHECK FOR Don’t provide the foreign key for the circuit; instead provide the circuit name, location, and country.
+app.get('/api/races/:raceId', async (req, res) => { //TESTED
 	const {data, error} = await supabase
 	.from('races')
-	.select()
+	.select('raceId, year, round, name, date, time, url, fp1_date, fp1_time, fp2_date, fp2_time, fp3_date, fp3_time, quali_date, quali_time, sprint_date, sprint_time, circuits(name, location, country)')
 	.eq('raceId',req.params.raceId);
 	if(data.length==0){
 		res.json({ error: `invalid race id.` });
@@ -137,7 +137,7 @@ app.get('/api/races/:raceId', async (req, res) => { //WHEN TESTING: CHECK FOR Do
 	else{
 		res.send(data);
 	}
-});//TESTED BUT DIDNT CHECK FORMAT(see note)
+});
 
 //Returns the races within a given season ordered by round
 app.get('/api/races/season/:year', async (req, res) => {//TESTED
