@@ -10,6 +10,7 @@ const supabase = supa.createClient(supaUrl, supaAnonKey);
 
 //Returns the seasons supported by the API (all data in 'seasons')
 app.get('/api/seasons', async (req, res) => { //TESTED
+	res.set('Access-Control-Allow-Origin', '*');
 	const {data, error} = await supabase
 	.from('seasons')
 	.select();
